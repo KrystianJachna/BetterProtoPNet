@@ -13,15 +13,26 @@ else
 fi
 
 # Cropping the dataset
-echo "Cropping the dataset..."
-python3 crop_dataset.py "${DIR}/images" "${DIR}/images.txt" "${DIR}/bounding_boxes.txt" "datasets/cub200_cropped/tmp"
-if [ $? -eq 0 ]; then
-    echo "Dataset cropped successfully."
+if [ -d "datasets/cub200_cropped" ]; then
+    echo "Directory datasets/cub200_cropped already exists."
 else
-    echo "Error: Dataset cropping failed."
-    exit 1
+    echo "Cropping the dataset..."
+    python3 crop_dataset.py "${DIR}/images" "${DIR}/images.txt" "${DIR}/bounding_boxes.txt" "datasets/cub200_cropped/tmp"
+    if [ $? -eq 0 ]; then
+        echo "Dataset cropped successfully."
+    else
+        echo "Error: Dataset cropping failed."
+        exit 1
+    fi
 fi
+
 
 # Splitting the dataset
 echo "Splitting the dataset..."
-python3 split_dataset.py "${DIR}/images" "${DIR}/images.txt" "${DIR}/train_test_split.txt" "${DIR}/images" "${DIR}/images" "datasets/cub200_cropped"
+python3 split_dataset.py "${DIR}/images.txt" "${DIR}/train_test_split.txt" "datasets/cub200_cropped/tmp" "datasets/cub200_cropped"
+if [ $? -eq 0 ]; then
+    echo "Dataset splitted successfully."
+else
+    echo "Error: Dataset split failed."
+    exit 1
+fi
