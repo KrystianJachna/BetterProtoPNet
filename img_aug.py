@@ -1,5 +1,7 @@
 import Augmentor
 import os
+from pathlib import Path
+
 def makedir(path):
     '''
     if path does not exist in the file system, create it
@@ -7,7 +9,7 @@ def makedir(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-datasets_root_dir = './datasets/cub200_cropped/'
+datasets_root_dir = str(Path('./datasets/cub200_cropped/').absolute()) + '/'
 dir = datasets_root_dir + 'train_cropped/'
 target_dir = datasets_root_dir + 'train_cropped_augmented/'
 
@@ -20,7 +22,7 @@ for i in range(len(folders)):
     tfd = target_folders[i]
     # rotation
     p = Augmentor.Pipeline(source_directory=fd, output_directory=tfd)
-    p.rotate(probability=1, max_left_rotation=15, max_right_rotation=15)
+    p.rotate_without_crop(probability=1, max_left_rotation=15, max_right_rotation=15)
     p.flip_left_right(probability=0.5)
     for i in range(10):
         p.process()
