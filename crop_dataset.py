@@ -11,11 +11,13 @@ def crop_image(image_path: Path, coords: tuple, saved_location: Path):
     :param coords: a tuple of x1, y1, x2, y2
     :param saved_location: the path to save the cropped image
     """
+    with Image.open(image_path) as img:
+        dpi = img.info.get('dpi', (72, 72))
     image_obj = Image.open(image_path)
     cropped_image = image_obj.crop(coords)
     if not saved_location.parent.exists():
         saved_location.parent.mkdir(parents=True)
-    cropped_image.save(saved_location)
+    cropped_image.save(saved_location, dpi=dpi)
 
 
 def parse_index_file(index_file: Path) -> dict:

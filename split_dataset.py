@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 import shutil
 import sys
+import os
 
 
 def read_train_test_split(train_test_split_file: Path):
@@ -46,16 +47,21 @@ def split_datasets(
     TRAIN_CROPPED_DIR.mkdir(parents=True, exist_ok=True)
     TEST_CROPPED_DIR.mkdir(parents=True, exist_ok=True)
 
-
     for image_path in train_set:
+        tmp = image_path
         image_path = images_path / image_path
-        dest_image_path = TRAIN_CROPPED_DIR / image_path.name
+        dest_image_path = TRAIN_CROPPED_DIR / tmp
+        if not os.path.exists(dest_image_path.parent):
+            os.mkdir(dest_image_path.parent)
         shutil.copy(image_path, dest_image_path)
 
     for image_path in test_set:
+        tmp = image_path
         image_path = images_path / image_path
-        dest_image_path = TEST_CROPPED_DIR / image_path.name
-        shutil.copy(image_path, dest_image_path) 
+        dest_image_path = TEST_CROPPED_DIR / tmp
+        if not os.path.exists(dest_image_path.parent):
+            os.mkdir(dest_image_path.parent)
+        shutil.copy(image_path, dest_image_path)
 
 
 def main():
