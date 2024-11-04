@@ -23,4 +23,5 @@ else
 fi
 
 # Splitting the dataset
-# ...
+echo "Splitting the dataset..."
+python3 split_dataset.py "${DIR}/images" "${DIR}/images.txt" "${DIR}/train_test_split.txt" "${DIR}/images" "${DIR}/images" "datasets/cub200_cropped"

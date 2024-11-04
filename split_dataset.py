@@ -4,16 +4,16 @@ import shutil
 import sys
 
 
-def read_train_test_split(file_path):
+def read_train_test_split(train_test_split_file: Path):
     split_info = {}
-    with open(file_path, "r") as file:
+    with open(train_test_split_file, "r") as file:
         for line in file:
             image_id, is_training_image = line.strip().split()
             split_info[int(image_id)] = int(is_training_image)
     return split_info
 
 
-def read_images(file_path):
+def read_images(file_path: Path):
     images = {}
     with open(file_path, "r") as file:
         for line in file:
@@ -22,7 +22,7 @@ def read_images(file_path):
     return images
 
 
-def get_train_test_split(split_info, images):
+def get_train_test_split(split_info: dict, images: dict):
     train_set = []
     test_set = []
     for image_id, is_training_image in split_info.items():
