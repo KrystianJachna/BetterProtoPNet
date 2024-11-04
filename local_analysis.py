@@ -14,6 +14,7 @@ import re
 import os
 import copy
 
+from device import device
 from helpers import makedir, find_high_activation_crop
 import model
 import push
@@ -73,7 +74,7 @@ log('model base architecture: ' + model_base_architecture)
 log('experiment run: ' + experiment_run)
 
 ppnet = torch.load(load_model_path)
-ppnet = ppnet.cuda()
+ppnet = ppnet.to(device)
 ppnet_multi = torch.nn.DataParallel(ppnet)
 
 img_size = ppnet_multi.module.img_size
@@ -180,7 +181,7 @@ img_pil = Image.open(test_image_path)
 img_tensor = preprocess(img_pil)
 img_variable = Variable(img_tensor.unsqueeze(0))
 
-images_test = img_variable.cuda()
+images_test = img_variable.to(device)
 labels_test = torch.tensor([test_image_label])
 
 logits, min_distances = ppnet_multi(images_test)
