@@ -11,6 +11,7 @@ import re
 
 import os
 
+from device import device
 from helpers import makedir
 import model
 import find_nearest
@@ -39,7 +40,7 @@ start_epoch_number = int(epoch_number_str)
 # load the model
 print('load model from ' + load_model_path)
 ppnet = torch.load(load_model_path)
-ppnet = ppnet.cuda()
+ppnet = ppnet.device(device)
 ppnet_multi = torch.nn.DataParallel(ppnet)
 
 img_size = ppnet_multi.module.img_size

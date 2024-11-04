@@ -10,6 +10,7 @@ import time
 
 import cv2
 
+from device import device
 from receptive_field import compute_rf_prototype
 from helpers import makedir, find_high_activation_crop
 
@@ -90,7 +91,7 @@ def find_k_nearest_patches_to_prototypes(dataloader, # pytorch dataloader (must 
             search_batch = search_batch_input
 
         with torch.no_grad():
-            search_batch = search_batch.cuda()
+            search_batch = search_batch.device(device)
             protoL_input_torch, proto_dist_torch = \
                 prototype_network_parallel.module.push_forward(search_batch)
 

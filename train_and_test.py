@@ -1,6 +1,7 @@
 import time
 import torch
 
+from device import device
 from helpers import list_of_distances, make_one_hot
 
 def _train_or_test(model, dataloader, optimizer=None, class_specific=True, use_l1_mask=True,
@@ -22,8 +23,8 @@ def _train_or_test(model, dataloader, optimizer=None, class_specific=True, use_l
     total_avg_separation_cost = 0
 
     for i, (image, label) in enumerate(dataloader):
-        input = image.cuda()
-        target = label.cuda()
+        input = image.device(device)
+        target = label.device(device)
 
         # torch.enable_grad() has no effect outside of no_grad()
         grad_req = torch.enable_grad() if is_train else torch.no_grad()

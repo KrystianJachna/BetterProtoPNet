@@ -53,8 +53,10 @@ shutil.copy(src=os.path.join(os.getcwd(), __file__), dst=model_dir)
 
 log, logclose = create_logger(log_filename=os.path.join(model_dir, 'prune.log'))
 
+from device import device
+
 ppnet = torch.load(original_model_dir + original_model_name)
-ppnet = ppnet.cuda()
+ppnet = ppnet.device(device)
 ppnet_multi = torch.nn.DataParallel(ppnet)
 class_specific = True
 
