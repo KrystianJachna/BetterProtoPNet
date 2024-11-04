@@ -4,7 +4,7 @@ import argparse
 from PIL import Image
 
 
-def crop_image(image_path: Path, coords: tuple[int, int, int, int], saved_location: Path):
+def crop_image(image_path: Path, coords: tuple, saved_location: Path):
     """
     Crop the image and save it to the target location
     :param image_path: the path to the image
@@ -18,7 +18,7 @@ def crop_image(image_path: Path, coords: tuple[int, int, int, int], saved_locati
     cropped_image.save(saved_location)
 
 
-def parse_index_file(index_file: Path) -> dict[int, Path]:
+def parse_index_file(index_file: Path) -> dict:
     out = {}
     with open(index_file) as f:
         for line in f.readlines():
@@ -29,7 +29,7 @@ def parse_index_file(index_file: Path) -> dict[int, Path]:
     return out
 
 
-def parse_coordinate_file(coordinate_file: Path) -> dict[int, tuple[float, ...]]:
+def parse_coordinate_file(coordinate_file: Path) -> dict:
     out = {}
     with open(coordinate_file) as f:
         for line in f.readlines():
