@@ -14,7 +14,7 @@ import train_and_test as tnt
 import save
 from log import create_logger
 from preprocess import mean, std, preprocess_input_function
-from device import device as dv
+from device import device
 
 import settings
 
@@ -22,8 +22,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-gpuid', nargs=1, type=str, default='0') # python3 main.py -gpuid=0,1,2,3
     args = parser.parse_args()
+    os.environ['CUDA_VISIBLE_DEVICES'] = args.gpuid[0]
+    print(os.environ['CUDA_VISIBLE_DEVICES'])
 
-    device = torch.device(dv)
     print(f"Using {device} device")
 
     # book keeping namings and code
