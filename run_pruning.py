@@ -17,6 +17,8 @@ import save
 from log import create_logger
 from preprocess import mean, std, preprocess_input_function
 
+from settings import required_accuracy
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-gpuid', nargs=1, type=str, default='0')
 parser.add_argument('-modeldir', nargs=1, type=str)
@@ -132,7 +134,7 @@ accu = tnt.test(model=ppnet_multi, dataloader=test_loader,
 save.save_model_w_condition(model=ppnet, model_dir=model_dir,
                             model_name=original_model_name.split('push')[0] + 'prune',
                             accu=accu,
-                            target_accu=0.70, log=log)
+                            target_accu=required_accuracy, log=log)
 
 # last layer optimization
 if optimize_last_layer:
@@ -157,6 +159,6 @@ if optimize_last_layer:
         save.save_model_w_condition(model=ppnet, model_dir=model_dir,
                                     model_name=original_model_name.split('push')[0] + '_' + str(i) + 'prune',
                                     accu=accu,
-                                    target_accu=0.70, log=log)
+                                    target_accu=required_accuracy, log=log)
 
 logclose()

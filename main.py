@@ -16,18 +16,15 @@ from log import create_logger
 from preprocess import mean, std, preprocess_input_function
 from device import device as dv
 
+import settings
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-gpuid', nargs=1, type=str, default='0') # python3 main.py -gpuid=0,1,2,3
     args = parser.parse_args()
 
-    # Check for MPS device
-    if torch.backends.mps.is_available():
-        device = torch.device("mps")
-        print("Using MPS device")
-    else:
-        device = torch.device(dv)
-        print(f"Using {device} device")
+    device = torch.device(dv)
+    print(f"Using {device} device")
 
     # book keeping namings and code
     from settings import base_architecture, img_size, prototype_shape, num_classes, \
@@ -157,7 +154,7 @@ def main():
         accu = tnt.test(model=ppnet_multi, dataloader=test_loader,
                         class_specific=class_specific, log=log)
         save.save_model_w_condition(model=ppnet, model_dir=model_dir, model_name=str(epoch) + 'nopush', accu=accu,
-                                    target_accu=0.70, log=log)
+                                    target_accu=settings.required_accuracy, log=log)
 
         if epoch >= push_start and epoch in push_epochs:
             push.push_prototypes(
@@ -176,7 +173,7 @@ def main():
             accu = tnt.test(model=ppnet_multi, dataloader=test_loader,
                             class_specific=class_specific, log=log)
             save.save_model_w_condition(model=ppnet, model_dir=model_dir, model_name=str(epoch) + 'push', accu=accu,
-                                        target_accu=0.70, log=log)
+                                        target_accu=settings.required_accuracy, log=log)
 
             if prototype_activation_function != 'linear':
                 tnt.last_only(model=ppnet_multi, log=log)
@@ -187,7 +184,7 @@ def main():
                     accu = tnt.test(model=ppnet_multi, dataloader=test_loader,
                                     class_specific=class_specific, log=log)
                     save.save_model_w_condition(model=ppnet, model_dir=model_dir, model_name=str(epoch) + '_' + str(i) + 'push', accu=accu,
-                                                target_accu=0.70, log=log)
+                                                target_accu=settings.required_accuracy, log=log)
 
     logclose()
 
